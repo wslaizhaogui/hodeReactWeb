@@ -1,45 +1,85 @@
-import { Menu, Icon } from 'antd';
+import { Menu } from 'antd';
 import React from "react";
 const { SubMenu } = Menu;
 
 function handleClick(e) {
     console.log('click', e);
 }
+const menuList =[
+    {
+        "menuId":"menu1000",
+        "menuName":"项目管理",
+        "url":"#",
+        "child":[
+            {
+                "menuId":"menu1010",
+                "menuName":"项目首页",
+                "url":"#",
+                "child":[
+
+                ]
+            },
+            {
+                "menuId":"menu1011",
+                "menuName":"我的项目",
+                "url":"#",
+                "child":[
+
+                ]
+            }
+        ]
+    },
+    {
+        "menuId":"menu2000",
+        "menuName":"知识管理",
+        "url":"#",
+        "child":[
+            {
+                "menuId":"menu2010",
+                "menuName":"知识首页",
+                "url":"#",
+                "child":[
+
+                ]
+            },
+            {
+                "menuId":"menu2011",
+                "menuName":"知识中心",
+                "url":"#",
+                "child":[
+
+                ]
+            }
+        ]
+    }
+];
 
 export default class MainMenu extends React.Component {
+    renderMenu = (data)=>{
+        return data.map((menu)=>{
+            if(menu.child.length===0){
+                return(
+                    <Menu.Item key={menu.menuId}>{menu.menuName}</Menu.Item>
+                )
+            }else{
+                return(
+                    <SubMenu key={menu.menuId} title={menu.menuName}>
+                        {this.renderMenu(menu.child)}
+                    </SubMenu>
+                )
+            }
+        })
+    }
+    componentWillMount(){
+        const menuListDom = this.renderMenu(menuList);
+        this.setState({
+            menuListDom,
+        });
+    };
     render() {
         return (
             <Menu onClick={handleClick} style={{ width: 200 }} mode="vertical">
-                <SubMenu
-                    key="sub2"
-                    title={
-                        <span>
-                            <Icon type="appstore" />
-                            <span>Navigation Two</span>
-                        </span>
-                    }
-                >
-                    <Menu.Item key="5">Option 5</Menu.Item>
-                    <Menu.Item key="6">Option 6</Menu.Item>
-                    <SubMenu key="sub3" title="Submenu">
-                        <Menu.Item key="7">Option 7</Menu.Item>
-                        <Menu.Item key="8">Option 8</Menu.Item>
-                    </SubMenu>
-                </SubMenu>
-                <SubMenu
-                    key="sub4"
-                    title={
-                        <span>
-                            <Icon type="setting" />
-                            <span>Navigation Three</span>
-                        </span>
-                    }
-                >
-                    <Menu.Item key="9">Option 9</Menu.Item>
-                    <Menu.Item key="10">Option 10</Menu.Item>
-                    <Menu.Item key="11">Option 11</Menu.Item>
-                    <Menu.Item key="12">Option 12</Menu.Item>
-                </SubMenu>
+                {this.renderMenu(menuList)}
             </Menu>
         );
     }

@@ -3,7 +3,7 @@ import React from "react";
 const { SubMenu } = Menu;
 
 function handleClick(e) {
-    console.log('click', e);
+    this.props.callbackParent(e);
 }
 const menuList =[
     {

@@ -5,6 +5,7 @@ const { SubMenu } = Menu;
 function handleClick(e) {
     this.props.callbackParent(e);
 }
+
 const menuList =[
     {
         "menuId":"menu1000",
@@ -55,11 +56,15 @@ const menuList =[
 ];
 
 export default class MainMenu extends React.Component {
+    toMain =(menu,e) =>{
+        this.props.main.changeTab(menu.menuId,menu.menuName,menu.url);
+    }
+    
     renderMenu = (data)=>{
         return data.map((menu)=>{
             if(menu.child.length===0){
                 return(
-                    <Menu.Item key={menu.menuId}>{menu.menuName}</Menu.Item>
+                    <Menu.Item key={menu.menuId} onClick={this.toMain.bind(this,menu)}>{menu.menuName}</Menu.Item>
                 )
             }else{
                 return(
@@ -78,7 +83,7 @@ export default class MainMenu extends React.Component {
     };
     render() {
         return (
-            <Menu onClick={handleClick} style={{ width: 200 }} mode="vertical">
+            <Menu style={{ width: 200 }} mode="vertical">
                 {this.renderMenu(menuList)}
             </Menu>
         );
